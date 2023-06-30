@@ -1,0 +1,32 @@
+version: '3.9'
+services:
+  db:
+    image: afx-crud/db
+    build: ./db
+    container_name: afx-crud-db
+    volumes:
+      - afx-crud-db-data:/data/db
+      - afx-crud-db-log:/var/log/mongodb
+    restart: always
+    ports:
+      - 23993:27017
+    networks:
+      connectors:
+        ipv4_address: 183.77.86.5 # Set static ip address for db containers
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: aidil
+      MONGO_INITDB_ROOT_PASSWORD: crud2023
+volumes:
+  afx-crud-db-data:
+    driver: local
+  afx-crud-db-log:
+    driver: local
+networks:
+  connectors:
+    name: afx-crud-network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "183.77.86.0/24"
+          gateway: "183.77.86.1"
+    attachable: true
