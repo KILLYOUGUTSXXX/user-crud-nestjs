@@ -1,4 +1,4 @@
-db = db.getSiblingDB('social')
+
 
 const password = {
   salt: '23a1531d2826a3cdcc8a7a1e4e226154',
@@ -6,7 +6,7 @@ const password = {
 }
 
 
-db.cl_users.insertOne({
+const data = {
   user_name: 'aidil',
   email: 'lord.aidilf@gmail.com',
   password: [password.hash, password.salt].join(' '),
@@ -23,6 +23,15 @@ db.cl_users.insertOne({
   disable_reason: null,
   created_at: (new Date().getTime() / 1000),
   last_update_at: null
-})
+}
+
+db = db.getSiblingDB('social_dev')
+db.cl_users.insertOne(data)
+
+db = db.getSiblingDB('social_prod')
+db.cl_users.insertOne(data)
+
+db = db.getSiblingDB('social_test')
+db.cl_users.insertOne(data)
 
 // All Done ...
