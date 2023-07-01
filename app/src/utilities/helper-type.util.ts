@@ -27,7 +27,7 @@ export type IRequestPayloads = {
 }
 
 
-interface IPayloadResponse {
+export interface IPayloadResponse {
   message: string,
   detailMessage?: string,
   data?: any,
@@ -39,6 +39,8 @@ interface IPayloadResponse {
 interface ICustomResponse {
   asJson: ((statusCode: number, payloadResponse: IPayloadResponse, logData?: Object | null) => void)
 }
+
+
 
 /**
  * mf: the main field, which consuming whole of property in a document.

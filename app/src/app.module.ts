@@ -1,29 +1,21 @@
-import { LogsService } from "./logs/logs.service";
-import { DynamicModule, ForwardReference, MiddlewareConsumer, Module, NestModule, Type } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, Type } from '@nestjs/common';
 import { RouterModule, Routes } from '@nestjs/core'
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { LogSchema } from "./logs/entities/logs.entity";
 import { AuthMiddleware, InitMiddleware, ProtectMiddleware, RequestBodyMiddleware, ResponseMiddleware } from "@middlewares";
 import routerConfig from "./app.router.ts";
 import validationConfig from "./app.validation";
-
-// Load all modules from routes
-function destructModuleFromRoutes (routes: Routes = []): (Type<any> | DynamicModule | Promise<DynamicModule> | ForwardReference<any>)[] {
-  return routes.reduce((a, b) => {
-    if(Array.isArray(b.children) && b.children.length > 0) return [...a, ...destructModuleFromRoutes(b.children as Routes)]
-    else if(!b.module) return a
-    
-    return [...a, b.module]
-  }, [])
-}
+import { destructModuleFromRoutes } from "@utilities/func.util";
+import { LogSchema } from '@common-schems/logs.schema';
+import { LogsService } from '@main/logs/logs.service';
+import { DatabaseService } from '@utilities/db-connection.util';
 
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ envFilePath: [`.env.${process.env.NEST_ENV}`] }),
+    ConfigModule.forRoot({ envFilePath: [`.env.${process.env.NEST_ENV}`], isGlobal: true }),
     ...destructModuleFromRoutes(routerConfig),
     RouterModule.register(routerConfig),
     MongooseModule.forRootAsync({
@@ -42,7 +34,7 @@ function destructModuleFromRoutes (routes: Routes = []): (Type<any> | DynamicMod
     MongooseModule.forFeature([{ name: 'cl_logs', schema: LogSchema }])
   ],
   controllers: [AppController],
-  providers: [AppService, LogsService, AuthMiddleware],
+  providers: [AppService, LogsService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

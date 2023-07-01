@@ -1,3 +1,5 @@
+import { DynamicModule, ForwardReference, Type } from '@nestjs/common'
+import { Routes } from '@nestjs/core'
 import * as moment from 'moment'
 
 const horoscope = ["Aquarius", "Pisces", "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn"]
@@ -10,7 +12,6 @@ const zodiac = ["Monkey","Rooster","Dog","Pig","Rat","Ox","Tiger","Rabbit","Drag
 export function generateHoroscope (date: string): string {
 	let month = +moment(date).startOf('day').format('MM') - 1
 	let day = +moment(date).startOf('day').format('DD')
-  console.log(month, day)
   if(month == 0 && day <= 20) {
 		month = 11
   } else if(day < days[month]){
@@ -31,4 +32,14 @@ export function generateZodiac (date: string) {
 	)
 
   return zodiac[n % 12]
+}
+
+/** Load all modules from routes*/ 
+export function destructModuleFromRoutes (routes: Routes = []): (Type<any> | DynamicModule | Promise<DynamicModule> | ForwardReference<any>)[] {
+  return routes.reduce((a, b) => {
+    if(Array.isArray(b.children) && b.children.length > 0) return [...a, ...destructModuleFromRoutes(b.children as Routes)]
+    else if(!b.module) return a
+    
+    return [...a, b.module]
+  }, [])
 }

@@ -1,18 +1,18 @@
 import { ExecutionContext, Injectable, Query, Req, createParamDecorator } from "@nestjs/common"
 import { InjectModel } from '@nestjs/mongoose'
-import { IUsers } from './ifaces/users-info.iface'
+import { IUsers } from '@common-ifaces/users/user-info.iface'
 import { Model } from 'mongoose'
 import { TAttributes, TQueryFindParams, TReturnGetSomeData, TModeAttributes, IJwtPayload, IRequestPayloads } from '@utilities/helper-type.util'
 import { queryGenerator } from '@utilities/query-generator.util'
-import { RegisterUserDTO } from "./dto/register-user.dto"
 import * as encryptions from "@utilities/encryption.util";
-import { UpdateBasicInfoUserDTO } from "./dto/update-basic-info.dto"
 import * as moment from "moment"
 import { generateHoroscope, generateZodiac } from "@utilities/func.util"
-import { ChangePasswordUserDTO } from "./dto/change-password-user.dto"
-import { LoginUserDTO } from "./dto/login-user.dto"
 import { IJwtCustom, JwtCustom } from "@utilities/token-generator.util"
-import { UserActivateDTO } from "./dto/activation-user.dto"
+import { UserActivateDTO } from "@common-dtos/users/activation-user.dto"
+import { LoginUserDTO } from "@common-dtos/users/login-user.dto"
+import { ChangePasswordUserDTO } from "@common-dtos/users/change-password-user.dto"
+import { RegisterUserDTO } from "@common-dtos/users/register-user.dto"
+import { UpdateBasicInfoUserDTO } from "@common-dtos/users/update-basic-info.dto"
 
 const attributes: TAttributes<IUsers> = {
   mf: [
@@ -114,15 +114,17 @@ export class UserService {
 
   async updateBasicInfoUser (userName: string, data: UpdateBasicInfoUserDTO): Promise<boolean> {
     try {
-      await this.getUserIfExists(userName)
+      await this.getUserIfExists(userName, 'mf')
       const stringBirthday = data.birthday ? moment(data.birthday).startOf('day').format('YYYY-MM-DD') : null
 
       await this.userModels.updateOne(
         { user_name: userName } as IUsers,
         {
           ...data,
-          zodiac: stringBirthday ? generateZodiac(stringBirthday) : null,
-          horoscope: stringBirthday ? generateHoroscope(stringBirthday) : null,
+          ...(stringBirthday ? {
+            zodiac: stringBirthday ? generateZodiac(stringBirthday) : null,
+            horoscope: stringBirthday ? generateHoroscope(stringBirthday) : null
+          } : {}),
           last_update_at: moment().unix()
         } as IUsers
       )
@@ -134,7 +136,7 @@ export class UserService {
 
   async changePasswordUser (userName: string, data: ChangePasswordUserDTO): Promise<boolean> {
     try {
-      const currentUser = await this.getUserIfExists(userName)
+      const currentUser = await this.getUserIfExists(userName, 'mf')
 
       const [_hash, _salt] = currentUser.password.split(' ')
       const encPassword = encryptions.encryptPassword(data.newPassword)
@@ -154,28 +156,9 @@ export class UserService {
     }
   }
 
-
-  async updateInterestUser (userName: string, interest: string): Promise<boolean> {
-    try {
-      await this.getUserIfExists(userName)
-      const newInterest = (interest || '').match(/#[\w_-]+/gm).join(' ')
-
-      await this.userModels.updateOne(
-        { user_name: userName } as IUsers,
-        {
-          interest: newInterest,
-          last_update_at: moment().unix()
-        } as IUsers
-      )
-      return true
-    } catch (er) {
-      throw new Error(er.message)
-    }
-  }
-
   async bannedUser (data: UserActivateDTO): Promise<boolean> {
     try {
-      const currentUser = await this.getUserIfExists(data.user_name)
+      const currentUser = await this.getUserIfExists(data.user_name, 'mf')
 
       if(!currentUser.status) throw new Error('User has been disabled before.')
       else if(currentUser.is_admin) throw new Error('Cannot disabled user admin.')
@@ -196,7 +179,7 @@ export class UserService {
 
   async disBannedUser (userName: string): Promise<boolean> {
     try {
-      const currentUser = await this.getOneUser(userName)
+      const currentUser = await this.getOneUser(userName, 'mf')
       
       if (!currentUser) throw new Error('User not found.')
       else if (currentUser.status) throw new Error('User is not disabled.')

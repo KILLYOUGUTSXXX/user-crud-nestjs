@@ -12,7 +12,7 @@ export class UpdateBasicInfoUserDTO {
   @IsOptional()
   readonly birthday: Date;
 
-  @IsEnum([['M', 'F', 'O']], { message: 'Gender is not defined.' })
+  @IsEnum(['M', 'F', 'O'], { message: 'Gender is not defined.' })
   @IsOptional()
   readonly gender: string;
 
@@ -24,9 +24,9 @@ export class UpdateBasicInfoUserDTO {
   @IsOptional()
   readonly weight: number;
 
-  @IsString()
-  @IsOptional()
-  readonly curr_img_url: string;
+  // @IsString()
+  // @IsOptional()
+  // readonly profile_img: string;
 
   @IsString()
   @IsOptional()
@@ -34,5 +34,5 @@ export class UpdateBasicInfoUserDTO {
 
   @IsString()
   @IsOptional()
-  readonly interest: number;
+  readonly interest: string;
 }

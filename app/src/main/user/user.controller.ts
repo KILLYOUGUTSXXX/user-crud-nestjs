@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, UsePipes, ValidationPipe, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Request, Response } from '@utilities/helper-type.util';
-import { RegisterUserDTO } from './dto/register-user.dto';
-import { LoginUserDTO } from './dto/login-user.dto';
-import { UpdateBasicInfoUserDTO } from './dto/update-basic-info.dto';
+import { RegisterUserDTO } from '@common-dtos/users/register-user.dto';
+import { LoginUserDTO } from '@common-dtos/users/login-user.dto';
+import { UpdateBasicInfoUserDTO } from '@common-dtos/users/update-basic-info.dto';
 
 @Controller()
 export class UserController {
@@ -65,7 +65,8 @@ export class UserController {
           {
             message: 'Login is authenticated.',
             data: { token: result.token, user_name: data.user_name }
-          }
+          },
+          { user_name: data.user_name }
         )
       }).catch(er => {
         res.asJson(
@@ -79,14 +80,15 @@ export class UserController {
       })
   }
 
-  @Patch('/updateProfile/:userName')
+  @Patch('/updateProfile')
   @UsePipes(ValidationPipe)
-  updateUserProfile (@Res() res: Response, @Param('userName') userName: string, @Req() req: Request, @Body() data: UpdateBasicInfoUserDTO ) {
-    return this.userService.updateBasicInfoUser(userName, data)
+  updateUserProfile (@Res() res: Response, @Req() req: Request, @Body() data: UpdateBasicInfoUserDTO ) {
+    return this.userService.updateBasicInfoUser(req.user_auth.user_name, data)
       .then(result => {
         res.asJson(
           HttpStatus.OK,
-          { message: 'OK' }
+          { message: 'OK' },
+          { user_name: req.user_auth.user_name }
         )
       }).catch(er => {
         res.asJson(

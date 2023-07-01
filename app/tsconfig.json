@@ -19,8 +19,14 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@utilities/*": ["src/_utilities/*"],
-      "@middlewares": ["src/_middlewares"]
+      "@utilities/*": ["src/utilities/*"],
+      "@main/*": ["src/main/*"],
+      "@app-module": ["src/app.module.ts"],
+      "@common-dtos/*": ["src/common/dtos/*"],
+      "@common-schems/*": ["src/common/schems/*"],
+      "@common-ifaces/*": ["src/common/interfaces/*"],
+      "@test-stubs/*": ["src/tests/stubs/*"],
+      "@middlewares": ["src/middlewares"]
     }
   }
 }

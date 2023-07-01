@@ -1,8 +1,8 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { NextFunction, Response as ExpressResponse } from 'express';
-import { Request, Response } from '@utilities/helper-type.util'
+import { NextFunction } from 'express';
+import { IPayloadResponse, Request, Response } from '@utilities/helper-type.util'
 import * as moment from 'moment';
-import { LogsService } from '../logs/logs.service'
+import { LogsService } from '@main/logs/logs.service'
 import { TCombineOptValidate } from '@utilities/ValidateRequest/type.vreq.util';
 
 
@@ -19,7 +19,7 @@ export default class ResponseMiddleware implements NestMiddleware {
     const chunkBuffers = [];
 
     // Assign custom response of JSON
-    res.asJson = (statusCode, payloadResponse, logData) => {
+    res.asJson = (statusCode: number, payloadResponse: IPayloadResponse, logData: any) => {
       this.partialData = (logData || null)
       
       return res.status(statusCode).json({
@@ -66,6 +66,7 @@ export default class ResponseMiddleware implements NestMiddleware {
         } else if (typeof responseLog.data?.message === 'object') {
           tmpMsg = 'Somemthing wrong'
         }
+
         this.logService.createLogs({
           res_code: responseLog.statusCode.toString(),
           ids: responseLog.reqId,

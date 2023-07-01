@@ -9,8 +9,8 @@ export function queryGenerator (
     let where = {}
     let tmpWhere = {}
     let attr = null
-    let paging = { offset: null, limit: null, page: 1 }
-    const { _page: page, _pageSize: pageSize, ...others } = query
+    const { _page: page = 1, _pageSize: pageSize = 20, ...others } = query
+    let paging = { offset: null, limit: null, page }
     const filtered = Object.getOwnPropertyNames(others || {}) || []
 
     filtered.map(items => {

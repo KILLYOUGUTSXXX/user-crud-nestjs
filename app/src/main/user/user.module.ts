@@ -1,9 +1,9 @@
-import { DynamicModule, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
-import { UserSchema } from './entities/user.entity';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserAdminController } from './user-admin.controller';
+import { UserSchema } from '@common-schems/user.schema';
 
 @Module({
   imports: [

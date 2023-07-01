@@ -1,6 +1,6 @@
 import { Routes } from '@nestjs/core'
-import { LogsModule } from './logs/logs.module'
-import { UserModule } from './user/user.module'
+import { LogsModule } from '@main/logs/logs.module'
+import { UserModule } from '@main/user/user.module'
 
 
 export default [
@@ -9,7 +9,6 @@ export default [
     children: [
       { path: 'loggings', module: LogsModule },
       { path: '/', module: UserModule }
-      // { path: '/', module: LogsModule }
     ]
   }
 ] as Routes

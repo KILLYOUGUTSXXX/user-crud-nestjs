@@ -1,9 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, UsePipes, ValidationPipe, Req, Query } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Request, Response } from '@utilities/helper-type.util';
-import { RegisterUserDTO } from './dto/register-user.dto';
-import { LoginUserDTO } from './dto/login-user.dto';
-import { UserActivateDTO } from './dto/activation-user.dto';
+import { UserActivateDTO } from '@common-dtos/users/activation-user.dto';
 
 @Controller('users')
 export class UserAdminController {
