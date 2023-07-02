@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsDate, IsDateString, IsEmail, IsEnum, IsNotEmpty, IsNumber, IsObject, IsOptional, IsString, MaxLength, MinLength, ValidateNested } from "class-validator";
+import { IsDate, IsDateString, IsEmail, IsEnum, IsNotEmpty, IsNumber, IsObject, IsOptional, IsString, IsUrl, MaxLength, MinLength, ValidateNested } from "class-validator";
 
 export class UpdateBasicInfoUserDTO {
   @IsString()
@@ -24,9 +24,10 @@ export class UpdateBasicInfoUserDTO {
   @IsOptional()
   readonly weight: number;
 
-  // @IsString()
-  // @IsOptional()
-  // readonly profile_img: string;
+  @IsString()
+  @IsUrl()
+  @IsOptional()
+  readonly curr_img_url: string;
 
   @IsString()
   @IsOptional()

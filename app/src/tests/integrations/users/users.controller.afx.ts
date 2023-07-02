@@ -3,7 +3,7 @@ import { ISharedTesting, TSequentiallyTesting } from '@utilities/helper-test.uti
 import * as userStubs from '@test-stubs/user.stub'
 
 
-export const $1_userControls: TSequentiallyTesting = ({ getDeps, setShared, getShared }) => {
+export const $1_userControls01: TSequentiallyTesting = ({ getDeps, setShared, getShared }) => {
   let request: IRequestMockCallback
   let token: string
 
@@ -15,9 +15,22 @@ export const $1_userControls: TSequentiallyTesting = ({ getDeps, setShared, getS
   userRegister(() => request)
   userLogin(() => request, setShared)
   validateIsTokenReceived(() => token)
+}
+
+export const $001_userControls02: TSequentiallyTesting = ({ getDeps, setShared, getShared }) => {
+  let request: IRequestMockCallback
+  let token: string
+
+  beforeEach(async () => {
+    request = getDeps().mockRequest
+    token = getShared().token
+  })
+  
   updateProfile(() => request, () => token)
   getProfile(() => request, () => token)
 }
+
+export
 
 function userRegister (request: () => IRequestMockCallback) {
   it('Test api "/api/register", must return status code 200', async () => {

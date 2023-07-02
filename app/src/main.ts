@@ -4,7 +4,7 @@ import { AppModule } from './app.module'
 import { MainLogger } from '@utilities/logger.util'
 import * as morgan from 'morgan'
 import { Request } from "@utilities/helper-type.util";
-import { ValidationPipe } from "@nestjs/common";
+import { ValidationPipe } from "@nestjs/common"
 
 const methodColors = {
   GET: 92,

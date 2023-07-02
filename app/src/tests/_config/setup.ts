@@ -4,6 +4,7 @@ import * as fs from 'fs'
 const initPath = path.resolve(__dirname + '/../integrations')
 
 
+  
 async function isDirectory (paths: string) {
   try {
     await fs.readdirSync(paths)

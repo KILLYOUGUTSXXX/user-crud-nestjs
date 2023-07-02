@@ -64,4 +64,11 @@ export default ({
       logging: true
     }
   },
+  '/api/file-handler/upload-image': {
+    'POST': {
+      code: 'FILE-UPLOAD-IMG',
+      name: 'Upload a image to cloudinary',
+      logging: true
+    }
+  }
 }) as TValidateRequest

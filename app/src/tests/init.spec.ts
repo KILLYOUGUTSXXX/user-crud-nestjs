@@ -9,6 +9,8 @@ import { Collection } from "mongoose"
 import { requestMock, IRequestMockCallback } from '@utilities/mock-request'
 import * as path from 'path'
 import { ValidationPipe } from "@nestjs/common"
+import { FileHandlerModule } from "@main/file-uploader/file-handler.module"
+
 
 const initPath = path.join(__dirname, 'integrations')
 let registerFiles = []
@@ -19,7 +21,7 @@ try {
   registerFiles = []
 }
 
-type TReconditionSequentialFunction = { [K: string]: { classes: TSequentiallyTesting, path: string } }
+type TReconditionSequentialFunction = { [K: string]: { classes: TSequentiallyTesting, path: string, fn_name: string } }
 
 describe('Sequential testing', () => {
   let shared: ISharedTesting = {
@@ -41,9 +43,10 @@ describe('Sequential testing', () => {
         imports: [
           AppModule,
           LogsModule,
-          UserModule
+          UserModule,
+          FileHandlerModule
         ],
-        providers: [DatabaseService]
+        providers: [DatabaseService, ]
       }).compile();
       
       const app = modules.createNestApplication()
@@ -64,11 +67,26 @@ describe('Sequential testing', () => {
 
   
   const flatFn: TReconditionSequentialFunction = loadFunctions()
+  let tmpLists: any[] = []
+
   describe('Running up the test', () => {
     const flatKeys: string[] = Object.keys(flatFn)
+      .sort((a: string, b: string) => +a - +b)
+
     for(let o in flatKeys) {
-      flatFn[flatKeys[o]].classes(paramsTesting)
+      const items: any = flatFn[flatKeys[o]]
+      let [keys, ...pureFnName] = items.fn_name.split('_')
+
+      tmpLists.push(`\x1b[94m\x1b[1m${+o + 1}. Running function[${keys}] test of \x1b[4m\x1b[37m${items.path} => ${pureFnName.join('')}\x1b[0m`)
+      items.classes(paramsTesting)
     }
+  })
+
+  describe('Test Result', () => {
+    afterEach(async () => {
+      console.log(tmpLists.join('\n'))
+    })
+    it(`Total ${tmpLists.length} function test is compiled.`, async () => {})
   })
 })
 
@@ -82,14 +100,14 @@ function loadFunctions () {
       for(let x in CurrClass) {
         if(CurrClass[x] instanceof Function && x.match(/(\$[0-9]+)_[a-zA-Z0-9_]+/g)) {
           // filter name of function, that can be as a testing stage.
-          const keys = x.split('_')[0].replace(/[^\d]/g, '')
+          let [keys] = x.split('_')
+          keys = keys.replace(/[^\d]/g, '')
 
-          if(flatFn[keys] instanceof Function) {
+          if(flatFn[keys]) {
             throw new Error(`\x1b[1m\x1b[41mConflict index of ${keys} for \x1b[37m\x1b[41m${registerFiles[a]} -> ${x}\x1b[0m`)
           }
-
-          Object.assign(flatFn, { [keys]: { classes: CurrClass[x], path: registerFiles[a] } })
-          console.info(`\x1b[32m\x1b[1m[Log]\x1b[0m Collecting function strategy "${x}" from \x1b[4m${registerFiles[a]}\x1b[0m.`)
+          
+          Object.assign(flatFn, { [keys]: { classes: CurrClass[x], path: registerFiles[a], fn_name: x } })
         }      
       }
     }

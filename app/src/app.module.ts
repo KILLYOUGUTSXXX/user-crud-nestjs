@@ -11,6 +11,9 @@ import { destructModuleFromRoutes } from "@utilities/func.util";
 import { LogSchema } from '@common-schems/logs.schema';
 import { LogsService } from '@main/logs/logs.service';
 
+// init base director
+global.__basedir = __dirname
+
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: [`.env.${process.env.NEST_ENV}`], isGlobal: true }),
