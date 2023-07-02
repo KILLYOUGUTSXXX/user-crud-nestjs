@@ -38,8 +38,7 @@ export default ({
     'GET': {
       code: 'GET-USER-PF',
       name: 'Get user profiles',
-      logging: true,
-      protect: protectStrategy.basicProtect
+      logging: true
     }
   },
   '/api/register': {

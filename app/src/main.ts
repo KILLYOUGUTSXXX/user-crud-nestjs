@@ -4,6 +4,7 @@ import { AppModule } from './app.module'
 import { MainLogger } from '@utilities/logger.util'
 import * as morgan from 'morgan'
 import { Request } from "@utilities/helper-type.util";
+import { ValidationPipe } from "@nestjs/common";
 
 const methodColors = {
   GET: 92,
@@ -52,6 +53,8 @@ async function bootstrap() {
       )
     })
   )
+
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }))
   await app.listen(3000);
 }
 bootstrap();

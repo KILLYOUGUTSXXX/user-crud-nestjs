@@ -10,8 +10,6 @@ import validationConfig from "./app.validation";
 import { destructModuleFromRoutes } from "@utilities/func.util";
 import { LogSchema } from '@common-schems/logs.schema';
 import { LogsService } from '@main/logs/logs.service';
-import { DatabaseService } from '@utilities/db-connection.util';
-
 
 @Module({
   imports: [

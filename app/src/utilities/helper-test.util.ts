@@ -1,5 +1,8 @@
 import { HttpStatus } from "@nestjs/common"
 import { IPayloadResponse, Response } from "./helper-type.util"
+import { TestingModule } from "@nestjs/testing"
+import { TGetCollection } from "./db-connection.util"
+import { IRequestMockCallback } from "./mock-request"
 
 export const mockResponse = (mapping: (statusCode: HttpStatus, responsePayload?: IPayloadResponse) => any): Partial<Response> => ({
   asJson: jest.fn((x: any, c: any) => {
@@ -8,7 +11,21 @@ export const mockResponse = (mapping: (statusCode: HttpStatus, responsePayload?:
 })
 
 
-export interface IRollbackSchemaOnTest {
-  mode: 'INSERT' | 'UPDATE',
-  identifier: string
+export interface ISharedTesting {
+  [K: string]: any,
+  token: string
 }
+
+export interface IDepsTesting {
+  modules: TestingModule,
+  getCollection: TGetCollection,
+  mockRequest: IRequestMockCallback
+}
+
+export interface ISequencePayload {
+  getDeps: () => IDepsTesting,
+  getShared: () => ISharedTesting
+  setShared: (key: string, values: any) => void
+}
+
+export type TSequentiallyTesting<T = any> = (payload: ISequencePayload) => T

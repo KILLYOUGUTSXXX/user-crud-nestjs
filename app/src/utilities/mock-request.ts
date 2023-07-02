@@ -2,18 +2,24 @@ import { RequestMethod } from '@nestjs/common'
 import * as request from  'supertest'
 import { TQueryFindParams } from './helper-type.util'
 
-const testingToken = 'CRUD2023 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.U2FsdGVkX1/tYrmo/7zzTDHDwNeFaZADUeQRjX4ooLlirZfsN4LeCFfD8c1hMPjpk1TRf1oMH5glOHzTMz3AMspRK8Jpg4xZ8vDdEPzyG8TCaTOcqhtKgLrieqYxVoqBlrNr+OnqHZsk/qM+RmYZEu8N+bxecVKTbmHZQHChS+GCRO8UNovp8bdpUFO5XuAA.roWjQjkpBPVts3mvpl4miI3zF-cCqVS8ScyFSSkL4Qk'
-
 // get property of enum Request Method
 export type TRequestMethod = keyof { [Px in keyof typeof RequestMethod]: true }
 
-const host = 'http://localhost:3000'
-export type IRequestMockCallback = <Q, DTO = {}> (method: TRequestMethod, target: string, query?: TQueryFindParams<Q>, body?: DTO) => 
-request.Test
+export type IRequestMockCallback = <Q, DTO = {}> (props: IPropRequestMock<Q, DTO>) => request.Test
 
+
+export interface IPropRequestMock<Q, DTO> {
+  method: TRequestMethod
+  target: string,
+  query?: TQueryFindParams<Q>,
+  body?: DTO,
+  authorization?: string
+}
 
 export function requestMock (httpServer: any): IRequestMockCallback {
-  return <Q, DTO = {}> (method: TRequestMethod, target: string, query: TQueryFindParams<Q> = {}, body?: DTO): request.Test => {
+  return <Q, DTO = {}> ({
+    method, target, query = {}, body, authorization = ''
+  }: IPropRequestMock<Q, DTO>): request.Test => {
     let urls: string = target
     let queryString: string[] = []
     const queryParams: any = Object.keys(query)
@@ -27,9 +33,8 @@ export function requestMock (httpServer: any): IRequestMockCallback {
     target += queryString.join('&')
 
     const xhttp = (request(httpServer)[method.toString().toLocaleLowerCase()](target) as request.Test)
-    return method !== 'GET' ? xhttp.set('authorization', testingToken)
-      : xhttp
-        .set('authorization', testingToken)
-        .send(body as any)
+    return xhttp
+      .set('authorization', `${process.env['AFX_BEARER']} ${authorization}`)
+      .send((body as any || {}))
   }
 }

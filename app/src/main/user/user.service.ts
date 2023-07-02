@@ -79,7 +79,7 @@ export class UserService {
   async registerUser (data: RegisterUserDTO): Promise<IUsers> {
     try {
       const encPassword = encryptions.encryptPassword(data.password)
-
+      
       const createUser = await new this.userModels({
         ...data,
         is_admin: false,
@@ -116,7 +116,6 @@ export class UserService {
     try {
       await this.getUserIfExists(userName, 'mf')
       const stringBirthday = data.birthday ? moment(data.birthday).startOf('day').format('YYYY-MM-DD') : null
-
       await this.userModels.updateOne(
         { user_name: userName } as IUsers,
         {
@@ -126,7 +125,7 @@ export class UserService {
             horoscope: stringBirthday ? generateHoroscope(stringBirthday) : null
           } : {}),
           last_update_at: moment().unix()
-        } as IUsers
+        } as UpdateBasicInfoUserDTO
       )
       return true
     } catch (er) {
@@ -159,7 +158,6 @@ export class UserService {
   async bannedUser (data: UserActivateDTO): Promise<boolean> {
     try {
       const currentUser = await this.getUserIfExists(data.user_name, 'mf')
-
       if(!currentUser.status) throw new Error('User has been disabled before.')
       else if(currentUser.is_admin) throw new Error('Cannot disabled user admin.')
 
@@ -184,7 +182,6 @@ export class UserService {
       if (!currentUser) throw new Error('User not found.')
       else if (currentUser.status) throw new Error('User is not disabled.')
       else if(currentUser.is_admin) throw new Error('Cannot enabled user admin.')
-
       await this.userModels.updateOne(
         { user_name: userName } as IUsers,
         {
