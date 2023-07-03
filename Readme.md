@@ -12,7 +12,7 @@
     ├ /common              # an object configuration that purposing to comunicated the data.
       ├ /dtos              # an directory class to validate the data before it write to databases.
       ├ /interfaces        # an directory interfaces to build the comunicate between any data to shema object of databases.
-      ├ /schems            # an diretoryclass to define the schema of databases.
+      ├ /schems            # an diretory class to define the schema of databases.
     ├ /main                # an directory that including configuration API.
     ├ /middlewares         # an directory to build flow of services before it really executed.
     ├ /tests               # a strategy about the  custom unit & integrations testing, that i named it as a "Awesome Sequential Testing".
@@ -38,7 +38,7 @@
 ## About Strategy of Testing
 The strategy of testing was builded with the
 purpose is for a simply way on configuring the 
-testing, leaving out the repeatable on defining the modules, and runing the testing step-by-step with setting up the index of sequence in name of function.
+testing, leaving out the repeatable on defining the modules, and runing the testing step-by-step with setting up the index of sequence in the name of function.
 
 **The implentation is looks like :**
 ```bash
@@ -63,28 +63,45 @@ $4_test4        # test passed
 **Rules :**
 - the name of file testing must be as **_*.afx.ts_**
 - the name of function must be prefixed as **_$([0-9]+)_<function_name>**
-- put all config test file inside of folder **_src/tests/integrations_**
+- put all config test file inside directory **_src/tests/integrations_**
 ## Stack of Middlewares
-describe stack here
-## Installation
 
-- clone repository : **_git clone <url>_**
-- build docker images : **_docker-compose build_**
-- build & run containers : **_docker-compose up -d_**
+**Main Apps**  
+&nbsp;&nbsp;**└ Init Middlewares** : Init informations of http request client & get load the config custom validation of route.   
+&nbsp;&nbsp;&nbsp;&nbsp;**└ Response Middlewares** : Assign custom response function.  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**└ Request Body Middlewares** : Velidate total of payload size the request body.  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**└ Auth Middlewares** : Validation the authorization.   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**└ Protect Middlewares**  : Execute & implementing the custom protect for route.
 
+## Installation & Usage
+
+- **clone repository :**
+    ```bash
+    git clone https://github.com/KILLYOUGUTSXXX/user-crud-youapp.git
+    ```
+- **set base of environtment for service app _docker-compose.yml_ :**
+    ```bash
+    ...
+    environment:
+      - BASE_ENV_SRC=PRODUCTION # the value must as [PRODUCTION | DEVELOPMENT]
+    ...
+    ```
+- **build docker images :**
+    ```bash
+    docker-compose build
+    ```
+- **build & run containers :**
+    ```bash
+    docker-compose up -d && docker-compose logs app --follow
+    ```
 **Service Access :**
 
-API : [localhost:3000](localhost:3000) / [183.77.86.1:3000](183.77.86.1)
-
-Database : **_mongo -u aidil -p crud2023 --port 23993_**
-
-Postman : <Postman Documentation Urls>
-
-
-
-
-
-    
+&nbsp;&nbsp;API : [localhost:3000](localhost:3000) / [183.77.86.1:3000](183.77.86.1)  
+&nbsp;&nbsp;Database :
+    ```bash
+    mongo -u aidil -p crud2023 --port 23993
+    ```  
+&nbsp;&nbsp;Postman : [API Documentation](https://documenter.getpostman.com/view/22370182/2s93zCZ1Be)
 
 ## Tech Stack
 [![My Skills](https://skillicons.dev/icons?i=nodejs,nest,docker,bash,ts,js)](https://skillicons.dev)

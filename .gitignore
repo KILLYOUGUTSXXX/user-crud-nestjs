@@ -4,6 +4,7 @@
 #     https://www.atlassian.com/git/tutorials/saving-changes/gitignore
 
 # Node artifact files
+app/jest-result
 app/node_modules/
 app/dist
 app/build

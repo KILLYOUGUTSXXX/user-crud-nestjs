@@ -1,4 +1,0 @@
-
-> nest-crud@0.0.1 test
-> NEST_ENV=test jest --detectOpenHandles --runInBand --forceExit
-

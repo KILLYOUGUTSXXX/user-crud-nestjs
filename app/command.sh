@@ -7,9 +7,10 @@ if [[ $BASE_ENV_SRC = "DEVELOPMENT" ]]; then
 elif [[ $BASE_ENV_SRC = "PRODUCTION" ]]; then
   npm run test;
   
-  failed_tes=$(cat jest-result | jq -r .numFailedTests);
+  failed_test=$(cat jest-result | jq -r .numFailedTests);
+  echo "Failed Test Totals : ${failed_test}";
 
-  if [[ $(($failed_tes)) > 0 ]]; then
+  if [[ $(($failed_test)) -gt 0 ]]; then
     echo -e '\e[31mService is not running, because the test is failure.'
   else
     npm run build;
