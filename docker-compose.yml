@@ -1,5 +1,19 @@
 version: '3.9'
 services:
+  app:
+    image: afx-crud/app
+    container_name: afx-crud-app
+    build: ./app
+    restart: always
+    ports:
+      - 4330:4330
+    networks:
+      connectors:
+        ipv4_address: 183.77.86.10 # Set static ip address for db containers
+    environment:
+      - BASE_ENV_SRC=PRODUCTION
+    depends_on:
+      - db
   db:
     image: afx-crud/db
     build: ./db

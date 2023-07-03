@@ -8,18 +8,11 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "NEST_ENV=dev nest start",
     "start:dev": "NEST_ENV=dev nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "NEST_ENV=prod node dist/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "NEST_ENV=test jest --detectOpenHandles --runInBand",
-    "test:watch": "NEST_ENV=test jest --watch --detectOpenHandles --runInBand",
-    "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "NEST_ENV=test jest --config ./test/jest-e2e.json",
-    "test:e2ew": "NEST_ENV=test jest --config ./test/jest-e2e.json --watch"
+    "test": "NEST_ENV=test jest --detectOpenHandles --runInBand --forceExit --outputFile ./jest-result --json",
+    "test:watch": "NEST_ENV=test jest --watch --detectOpenHandles --runInBand"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
