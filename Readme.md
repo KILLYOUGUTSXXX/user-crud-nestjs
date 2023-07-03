@@ -1,6 +1,5 @@
 
-# YOUAPP - CRUD 
-
+# NEST - CRUD 2023
 
 
 ## File Structure
@@ -102,6 +101,16 @@ $4_test4        # test passed
     mongo -u aidil -p crud2023 --port 23993
     ```  
 &nbsp;&nbsp;Postman : [API Documentation](https://documenter.getpostman.com/view/22370182/2s93zCZ1Be)
+
+## Authors
+- [@KILLYOURGUTS](https://github.com/KILLYOUGUTSXXX)
+
+## Adventages
+- Sequential Testing
+- Re-encrypted part of payload JWT
+- User Authorization
+- Automate Dockerize Strategy of Production Stage
+- and others
 
 ## Tech Stack
 [![My Skills](https://skillicons.dev/icons?i=nodejs,nest,docker,bash,ts,js)](https://skillicons.dev)
