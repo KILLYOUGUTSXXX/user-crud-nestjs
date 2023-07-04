@@ -5,7 +5,7 @@
   "author": "KILLYOUGUTSXXX",
   "private": true,
   "main": "index.ts",
-  "license": "UNLICENSED",
+  "license": "GPL-3.0-or-later",
   "scripts": {
     "build": "nest build",
     "start:dev": "NEST_ENV=dev nest start --watch",
