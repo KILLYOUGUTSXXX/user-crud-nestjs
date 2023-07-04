@@ -61,7 +61,7 @@ $4_test4        # test passed
 
 **Rules :**
 - the name of file testing must be as **_*.afx.ts_**
-- the name of function must be prefixed as **_$([0-9]+)_<function_name>**
+- the name of function must be prefixed as **_$([0-9]+)\_<function_name>_**
 - put all config test file inside directory **_src/tests/integrations_**
 ## Stack of Middlewares
 
