@@ -39,6 +39,9 @@ The strategy of testing was builded with the
 purpose is for a simply way on configuring the 
 testing, leaving out the repeatable on defining the modules, and runing the testing step-by-step with setting up the index of sequence in the name of function.
 
+## Part of Repository
+ - [https://github.com/KILLYOUGUTSXXX/nestjs-2023](https://github.com/KILLYOUGUTSXXX/nestjs-2023)
+
 **The implentation is looks like :**
 ```bash
 # assigned function testing
